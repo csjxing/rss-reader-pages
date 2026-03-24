@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSS Reader - 简洁优雅的 RSS 阅读器</title>
+    <meta name="description" content="iOS 原生 RSS 阅读器，支持文章朗读、阅读进度同步、笔记管理">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E88E5;
+            --primary-light: #42A5F5;
+            --primary-dark: #1565C0;
+            --secondary: #1976D2;
+            --text: #1F2937;
+            --text-light: #6B7280;
+            --text-muted: #9CA3AF;
+            --bg: #FFFFFF;
+            --bg-alt: #E3F2FD;
+            --border: #E5E7EB;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .download-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 3rem 1.5rem 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(255, 87, 34, 0.3);
+        }
+
+        .hero-icon svg {
+            width: 44px;
+            height: 44px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .tagline {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .hero .tagline-en {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Screenshot */
+        .screenshot {
+            max-width: 400px;
+            margin: 0 auto 3rem;
+            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .screenshot-inner {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .screenshot img {
+            width: 100%;
+            display: block;
+        }
+
+        /* Features */
+        .features {
+            padding: 3rem 1.5rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 1.5rem 1rem;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-alt);
+            border-radius: 12px;
+            margin: 0 auto 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .feature-card h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .feature-card .desc-zh {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-card .desc-en {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Highlights */
+        .highlights {
+            padding: 3rem 1.5rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .highlight-item {
+            background: var(--bg-alt);
+            padding: 1.25rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .highlight-item span {
+            font-size: 1.75rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .highlight-item h4 + p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .highlight-item p:last-child {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        /* Tools */
+        .tools {
+            background: var(--bg-alt);
+            padding: 3rem 1.5rem;
+        }
+
+        .tools-content {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .tool-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tool-item .tool-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tool-item .tool-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .tool-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-item p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* Download */
+        .download {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .download h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .download h2 + p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .download-btn-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .download-btn-large:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .download-btn-large svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .download-btn-large .platform {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .download-btn-large .action {
+            font-weight: 600;
+        }
+
+        /* Contact */
+        .contact {
+            padding: 3rem 1.5rem;
+            text-align: center;
+            background: var(--bg-alt);
+        }
+
+        .contact p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact .en {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .contact-links a:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .contact-links svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--primary);
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.75rem; }
+            .screenshot { max-width: 100%; padding: 1rem; }
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            .download-buttons { flex-direction: column; align-items: center; }
+            .feature-card { padding: 1rem 0.5rem; }
+            .feature-icon { width: 40px; height: 40px; font-size: 1rem; border-radius: 10px; margin-bottom: 0.5rem; }
+            .feature-card h3 { font-size: 0.85rem; margin-bottom: 0.25rem; }
+            .feature-card .desc-zh { font-size: 0.75rem; }
+            .feature-card .desc-en { font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="https://weisee.com/" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            微见
+        </a>
+    </header>
+
+    <section class="hero">
+        <div style="width: 80px; height: 80px; border-radius: 20px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 12px; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.2);">
+            <img src="images/icon.png" alt="RSS Reader Logo" style="width: 100%; height: 100%; border-radius: 12px;">
+        </div>
+
+        <h1><span>RSS Reader</span></h1>
+        <p class="tagline">简洁优雅的 RSS 阅读器</p>
+        <p class="tagline-en">A Clean & Elegant RSS Reader for iOS</p>
+    </section>
+
+    <section class="features">
+        <div class="section-title">核心特性 / Features</div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📡</div>
+                <h3>RSS 订阅</h3>
+                <p class="desc-zh">添加和管理 RSS 源</p>
+                <p class="desc-en">Add & manage RSS feeds</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📖</div>
+                <h3>沉浸阅读</h3>
+                <p class="desc-zh">清爽的阅读体验</p>
+                <p class="desc-en">Clean reading experience</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔊</div>
+                <h3>文章朗读</h3>
+                <p class="desc-zh">语音朗读文章内容</p>
+                <p class="desc-en">Text-to-speech support</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>笔记管理</h3>
+                <p class="desc-zh">记录阅读笔记</p>
+                <p class="desc-en">Take reading notes</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="highlights">
+        <div class="section-title">产品亮点 / Highlights</div>
+        <div class="highlight-grid">
+            <div class="highlight-item">
+                <span>🚀</span>
+                <h4>快速发现</h4>
+                <p>Quick Discovery</p>
+                <p>自动发现网站 RSS 源</p>
+            </div>
+            <div class="highlight-item">
+                <span>📱</span>
+                <h4>原生体验</h4>
+                <p>Native iOS</p>
+                <p>专为 iOS 打造</p>
+            </div>
+            <div class="highlight-item">
+                <span>🎨</span>
+                <h4>主题切换</h4>
+                <p>Theme Support</p>
+                <p>支持亮色/暗色模式</p>
+            </div>
+            <div class="highlight-item">
+                <span>📊</span>
+                <h4>阅读进度</h4>
+                <p>Progress Tracking</p>
+                <p>自动同步阅读进度</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tools">
+        <div class="tools-content">
+            <div class="section-title">实用功能 / Tools</div>
+            <div class="tools-grid">
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>变速朗读</h4>
+                        <p>支持 0.5x - 3x 倍速，适合不同阅读场景</p>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>收藏文章</h4>
+                        <p>收藏感兴趣的文章，稍后阅读</p>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>内容提取</h4>
+                        <p>自动提取文章正文，去除广告干扰</p>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="9" y1="9" x2="15" y2="15"/>
+                            <line x1="15" y1="9" x2="9" y2="15"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>本地存储</h4>
+                        <p>数据本地存储，隐私安全有保障</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact">
+        <div class="section-title">联系我们 / Contact Us</div>
+        <p>有问题或建议？欢迎联系</p>
+        <p class="en">Questions or suggestions? Get in touch</p>
+        <div class="contact-links">
+            <a href="mailto:langbenlanglou@gmail.com">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                langbenlanglou@gmail.com
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 <a href="https://weisee.com/">微见工作室 weisee team</a> · <a href="privacy">隐私政策</a></p>
+    </footer>
+</body>
+</html>
