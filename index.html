@@ -1,11 +1,16 @@
+---
+---
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSS Reader - 简洁优雅的 RSS 阅读器</title>
-    <meta name="description" content="iOS 原生 RSS 阅读器，支持文章朗读、阅读进度同步、笔记管理">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <title>墨读 RSS - RSS Reader - 智能信息聚合</title>
+    <meta name="description" content="简洁优雅的 RSS 阅读器，智能信息聚合，让阅读更高效">
+    <link rel="icon" type="image/svg+xml" href="images/icon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="apple-touch-icon" href="images/icon.png">
     <style>
         * {
             margin: 0;
@@ -14,15 +19,15 @@
         }
 
         :root {
-            --primary: #1E88E5;
-            --primary-light: #42A5F5;
-            --primary-dark: #1565C0;
-            --secondary: #1976D2;
+            --primary: #0066FF;
+            --primary-light: #3385FF;
+            --primary-dark: #0052CC;
+            --primary-glow: rgba(0, 102, 255, 0.15);
             --text: #1F2937;
             --text-light: #6B7280;
             --text-muted: #9CA3AF;
             --bg: #FFFFFF;
-            --bg-alt: #E3F2FD;
+            --bg-alt: #F0F7FF;
             --border: #E5E7EB;
         }
 
@@ -66,7 +71,7 @@
             align-items: center;
             gap: 0.4rem;
             padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
             color: white;
             border-radius: 8px;
             text-decoration: none;
@@ -76,8 +81,7 @@
         }
 
         .download-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
+            background: var(--primary-dark);
         }
 
         /* Hero */
@@ -88,24 +92,6 @@
             margin: 0 auto;
         }
 
-        .hero-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 20px;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 8px 24px rgba(255, 87, 34, 0.3);
-        }
-
-        .hero-icon svg {
-            width: 44px;
-            height: 44px;
-            color: white;
-        }
-
         .hero h1 {
             font-size: 2.5rem;
             font-weight: 700;
@@ -114,10 +100,7 @@
         }
 
         .hero h1 span {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
         }
 
         .hero .tagline {
@@ -130,28 +113,6 @@
             font-size: 0.95rem;
             color: var(--text-muted);
             margin-bottom: 2rem;
-        }
-
-        /* Screenshot */
-        .screenshot {
-            max-width: 400px;
-            margin: 0 auto 3rem;
-            background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .screenshot-inner {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-        }
-
-        .screenshot img {
-            width: 100%;
-            display: block;
         }
 
         /* Features */
@@ -214,7 +175,11 @@
 
         /* Highlights */
         .highlights {
+            background: var(--bg-alt);
             padding: 3rem 1.5rem;
+        }
+
+        .highlights-content {
             max-width: 960px;
             margin: 0 auto;
         }
@@ -226,7 +191,7 @@
         }
 
         .highlight-item {
-            background: var(--bg-alt);
+            background: white;
             padding: 1.25rem;
             border-radius: 12px;
             text-align: center;
@@ -253,60 +218,6 @@
             font-size: 0.8rem;
             color: var(--text-light);
             margin-top: 0.25rem;
-        }
-
-        /* Tools */
-        .tools {
-            background: var(--bg-alt);
-            padding: 3rem 1.5rem;
-        }
-
-        .tools-content {
-            max-width: 960px;
-            margin: 0 auto;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .tool-item {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .tool-item .tool-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .tool-item .tool-icon svg {
-            width: 24px;
-            height: 24px;
-            color: white;
-        }
-
-        .tool-item h4 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .tool-item p {
-            font-size: 0.8rem;
-            color: var(--text-light);
         }
 
         /* Download */
@@ -340,17 +251,17 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
             border-radius: 12px;
             text-decoration: none;
-            color: white;
-            font-weight: 500;
+            color: var(--text);
             transition: all 0.2s;
         }
 
         .download-btn-large:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
+            border-color: var(--primary);
+            background: white;
         }
 
         .download-btn-large svg {
@@ -360,7 +271,7 @@
 
         .download-btn-large .platform {
             font-size: 0.75rem;
-            opacity: 0.8;
+            color: var(--text-muted);
         }
 
         .download-btn-large .action {
@@ -417,6 +328,75 @@
             height: 18px;
         }
 
+        /* Support */
+        .support {
+            padding: 3rem 1.5rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .support-content {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .support-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-alt);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+        }
+
+        .support-item:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.1);
+        }
+
+        .support-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .support-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .support-item h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .support-item p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .support-item .en {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
         /* Footer */
         footer {
             padding: 2rem 1.5rem;
@@ -441,20 +421,19 @@
         /* Mobile */
         @media (max-width: 600px) {
             .hero h1 { font-size: 1.75rem; }
-            .screenshot { max-width: 100%; padding: 1rem; }
+            .download-buttons { flex-direction: column; align-items: center; }
             .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.5rem;
             }
-            .tools-grid {
+            .feature-card { padding: 0.75rem 0.25rem; }
+            .feature-icon { width: 36px; height: 36px; font-size: 0.9rem; border-radius: 10px; margin-bottom: 0.5rem; }
+            .feature-card h3 { font-size: 0.8rem; margin-bottom: 0.25rem; }
+            .feature-card .desc-zh { font-size: 0.7rem; }
+            .feature-card .desc-en { font-size: 0.6rem; }
+            .support-grid {
                 grid-template-columns: 1fr;
             }
-            .download-buttons { flex-direction: column; align-items: center; }
-            .feature-card { padding: 1rem 0.5rem; }
-            .feature-icon { width: 40px; height: 40px; font-size: 1rem; border-radius: 10px; margin-bottom: 0.5rem; }
-            .feature-card h3 { font-size: 0.85rem; margin-bottom: 0.25rem; }
-            .feature-card .desc-zh { font-size: 0.75rem; }
-            .feature-card .desc-en { font-size: 0.65rem; }
         }
     </style>
 </head>
@@ -467,23 +446,33 @@
     </header>
 
     <section class="hero">
-        <div style="width: 80px; height: 80px; border-radius: 20px; margin: 0 auto 1.5rem; background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 12px; box-shadow: 0 8px 24px rgba(30, 136, 229, 0.2);">
-            <img src="images/icon.png" alt="RSS Reader Logo" style="width: 100%; height: 100%; border-radius: 12px;">
-        </div>
+        <!-- Logo -->
+        <img src="images/icon.png" alt="墨读 RSS Logo" style="width: 120px; height: 120px; border-radius: 28px; margin-bottom: 1.5rem;">
 
-        <h1><span>RSS Reader</span></h1>
-        <p class="tagline">简洁优雅的 RSS 阅读器</p>
-        <p class="tagline-en">A Clean & Elegant RSS Reader for iOS</p>
+        <h1><span>墨读</span> RSS - RSS Reader</h1>
+        <p class="tagline">iOS 原生智能信息聚合阅读器</p>
+        <p class="tagline-en">Intelligent RSS Reader for iOS</p>
     </section>
+
+    <!-- 截图区域 -->
+    <div style="padding: 0 1.5rem;">
+        <div style="max-width: 800px; margin: 0 auto 3rem; position: relative;">
+            <div style="overflow: hidden; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,102,255,0.1); background: var(--bg-alt); padding: 2rem; text-align: center;">
+                <img src="images/icon.png" alt="墨读 RSS" style="width: 160px; height: 160px; border-radius: 36px; margin-bottom: 1rem;">
+                <p style="color: var(--text-muted); font-size: 0.9rem;">应用截图即将上线</p>
+                <p style="color: var(--text-muted); font-size: 0.75rem;">Screenshots coming soon</p>
+            </div>
+        </div>
+    </div>
 
     <section class="features">
         <div class="section-title">核心特性 / Features</div>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">📡</div>
-                <h3>RSS 订阅</h3>
-                <p class="desc-zh">添加和管理 RSS 源</p>
-                <p class="desc-en">Add & manage RSS feeds</p>
+                <h3>智能订阅</h3>
+                <p class="desc-zh">自动发现 RSS 源</p>
+                <p class="desc-en">Auto-discover RSS feeds</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📖</div>
@@ -494,7 +483,7 @@
             <div class="feature-card">
                 <div class="feature-icon">🔊</div>
                 <h3>文章朗读</h3>
-                <p class="desc-zh">语音朗读文章内容</p>
+                <p class="desc-zh">语音朗读内容</p>
                 <p class="desc-en">Text-to-speech support</p>
             </div>
             <div class="feature-card">
@@ -507,90 +496,41 @@
     </section>
 
     <section class="highlights">
-        <div class="section-title">产品亮点 / Highlights</div>
-        <div class="highlight-grid">
-            <div class="highlight-item">
-                <span>🚀</span>
-                <h4>快速发现</h4>
-                <p>Quick Discovery</p>
-                <p>自动发现网站 RSS 源</p>
-            </div>
-            <div class="highlight-item">
-                <span>📱</span>
-                <h4>原生体验</h4>
-                <p>Native iOS</p>
-                <p>专为 iOS 打造</p>
-            </div>
-            <div class="highlight-item">
-                <span>🎨</span>
-                <h4>主题切换</h4>
-                <p>Theme Support</p>
-                <p>支持亮色/暗色模式</p>
-            </div>
-            <div class="highlight-item">
-                <span>📊</span>
-                <h4>阅读进度</h4>
-                <p>Progress Tracking</p>
-                <p>自动同步阅读进度</p>
+        <div class="highlights-content">
+            <div class="section-title">产品亮点 / Highlights</div>
+            <div class="highlight-grid">
+                <div class="highlight-item">
+                    <span>🚀</span>
+                    <h4>快速发现</h4>
+                    <p>Quick Discovery</p>
+                    <p>自动发现网站 RSS 源</p>
+                </div>
+                <div class="highlight-item">
+                    <span>📱</span>
+                    <h4>原生体验</h4>
+                    <p>Native iOS</p>
+                    <p>专为 iOS 打造</p>
+                </div>
+                <div class="highlight-item">
+                    <span>🎨</span>
+                    <h4>主题切换</h4>
+                    <p>Theme Support</p>
+                    <p>支持亮色/暗色模式</p>
+                </div>
+                <div class="highlight-item">
+                    <span>📊</span>
+                    <h4>阅读进度</h4>
+                    <p>Progress Tracking</p>
+                    <p>自动同步阅读进度</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="tools">
-        <div class="tools-content">
-            <div class="section-title">实用功能 / Tools</div>
-            <div class="tools-grid">
-                <div class="tool-item">
-                    <div class="tool-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M12 6v6l4 2"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>变速朗读</h4>
-                        <p>支持 0.5x - 3x 倍速，适合不同阅读场景</p>
-                    </div>
-                </div>
-                <div class="tool-item">
-                    <div class="tool-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>收藏文章</h4>
-                        <p>收藏感兴趣的文章，稍后阅读</p>
-                    </div>
-                </div>
-                <div class="tool-item">
-                    <div class="tool-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="17 8 12 3 7 8"/>
-                            <line x1="12" y1="3" x2="12" y2="15"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>内容提取</h4>
-                        <p>自动提取文章正文，去除广告干扰</p>
-                    </div>
-                </div>
-                <div class="tool-item">
-                    <div class="tool-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="9" y1="9" x2="15" y2="15"/>
-                            <line x1="15" y1="9" x2="9" y2="15"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h4>本地存储</h4>
-                        <p>数据本地存储，隐私安全有保障</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section class="download">
+        <div class="section-title">立即下载 / Download</div>
+        <h2>开启智能阅读之旅</h2>
+        <p>Start your intelligent reading journey</p>
     </section>
 
     <section class="contact">
@@ -602,6 +542,40 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                 langbenlanglou@gmail.com
             </a>
+        </div>
+    </section>
+
+    <section class="support">
+        <div class="support-content">
+            <div class="section-title">技术支持 / Technical Support</div>
+            <div class="support-grid">
+                <a href="mailto:langbenlanglou@gmail.com" class="support-item">
+                    <div class="support-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>问题反馈</h4>
+                        <p>报告 Bug 或功能建议</p>
+                        <p class="en">Bug reports & feature requests</p>
+                    </div>
+                </a>
+                <a href="mailto:langbenlanglou@gmail.com" class="support-item">
+                    <div class="support-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h4>使用帮助</h4>
+                        <p>如何使用应用功能</p>
+                        <p class="en">How to use the app</p>
+                    </div>
+                </a>
+            </div>
         </div>
     </section>
 
